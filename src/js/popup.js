@@ -160,8 +160,8 @@ var hashFromPopupData = function(reset) {
     }
     hasher.sort();
     hasher.push(uDom('body').hasClass('off'));
-    hasher.push(uDom.nodeFromId('no-cosmetic-filtering').classList.contains('on'));
-    hasher.push(uDom.nodeFromId('no-remote-fonts').classList.contains('on'));
+    //hasher.push(uDom.nodeFromId('no-cosmetic-filtering').classList.contains('on'));
+    //hasher.push(uDom.nodeFromId('no-remote-fonts').classList.contains('on'));
 
     var hash = hasher.join('');
     if ( reset ) {
@@ -353,53 +353,53 @@ var buildAllFirewallRows = function() {
 
 /******************************************************************************/
 
-var renderPrivacyExposure = function() {
-    allDomains = {};
-    allDomainCount = touchedDomainCount = 0;
-    allHostnameRows = [];
-
-    // Sort hostnames. First-party hostnames must always appear at the top
-    // of the list.
-    var desHostnameDone = {};
-    var keys = Object.keys(popupData.firewallRules)
-                     .sort(rulekeyCompare);
-    var key, des, hnDetails;
-    for ( var i = 0; i < keys.length; i++ ) {
-        key = keys[i];
-        des = key.slice(2, key.indexOf(' ', 2));
-        // Specific-type rules -- these are built-in
-        if ( des === '*' || desHostnameDone.hasOwnProperty(des) ) {
-            continue;
-        }
-        hnDetails = popupData.hostnameDict[des] || {};
-        if ( allDomains.hasOwnProperty(hnDetails.domain) === false ) {
-            allDomains[hnDetails.domain] = false;
-            allDomainCount += 1;
-        }
-        if ( hnDetails.allowCount !== 0 ) {
-            if ( allDomains[hnDetails.domain] === false ) {
-                allDomains[hnDetails.domain] = true;
-                touchedDomainCount += 1;
-            }
-        }
-        allHostnameRows.push(des);
-        desHostnameDone[des] = true;
-    }
-
-    // Domain of the page must always be included (if there is one)
-    if (
-        allDomains.hasOwnProperty(popupData.pageDomain) === false &&
-        reNetworkRelatedURL.test(popupData.rawURL)
-    ) {
-        allHostnameRows.push(popupData.pageDomain);
-        allDomains[popupData.pageDomain] = false;
-        allDomainCount += 1;
-    }
-
-    var summary = domainsHitStr.replace('{{count}}', touchedDomainCount.toLocaleString())
-                               .replace('{{total}}', allDomainCount.toLocaleString());
-    uDom.nodeFromId('popupHitDomainCount').textContent = summary;
-};
+//var renderPrivacyExposure = function() {
+//    allDomains = {};
+//    allDomainCount = touchedDomainCount = 0;
+//    allHostnameRows = [];
+//
+//    // Sort hostnames. First-party hostnames must always appear at the top
+//    // of the list.
+//    var desHostnameDone = {};
+//    var keys = Object.keys(popupData.firewallRules)
+//                     .sort(rulekeyCompare);
+//    var key, des, hnDetails;
+//    for ( var i = 0; i < keys.length; i++ ) {
+//        key = keys[i];
+//        des = key.slice(2, key.indexOf(' ', 2));
+//        // Specific-type rules -- these are built-in
+//        if ( des === '*' || desHostnameDone.hasOwnProperty(des) ) {
+//            continue;
+//        }
+//        hnDetails = popupData.hostnameDict[des] || {};
+//        if ( allDomains.hasOwnProperty(hnDetails.domain) === false ) {
+//            allDomains[hnDetails.domain] = false;
+//            allDomainCount += 1;
+//        }
+//        if ( hnDetails.allowCount !== 0 ) {
+//            if ( allDomains[hnDetails.domain] === false ) {
+//                allDomains[hnDetails.domain] = true;
+//                touchedDomainCount += 1;
+//            }
+//        }
+//        allHostnameRows.push(des);
+//        desHostnameDone[des] = true;
+//    }
+//
+//    // Domain of the page must always be included (if there is one)
+//    if (
+//        allDomains.hasOwnProperty(popupData.pageDomain) === false &&
+//        reNetworkRelatedURL.test(popupData.rawURL)
+//    ) {
+//        allHostnameRows.push(popupData.pageDomain);
+//        allDomains[popupData.pageDomain] = false;
+//        allDomainCount += 1;
+//    }
+//
+//    var summary = domainsHitStr.replace('{{count}}', touchedDomainCount.toLocaleString())
+//                               .replace('{{total}}', allDomainCount.toLocaleString());
+//    uDom.nodeFromId('popupHitDomainCount').textContent = summary;
+//};
 
 /******************************************************************************/
 
@@ -410,8 +410,8 @@ var renderPopup = function() {
         document.title = popupData.appName + ' - ' + popupData.tabTitle;
     }
 
-    uDom.nodeFromId('appname').textContent = popupData.appName;
-    uDom.nodeFromId('version').textContent = popupData.appVersion;
+    //uDom.nodeFromId('appname').textContent = popupData.appName;
+    //uDom.nodeFromId('version').textContent = popupData.appVersion;
     uDom('body')
         .toggleClass('advancedUser', popupData.advancedUserEnabled)
         .toggleClass(
@@ -422,7 +422,7 @@ var renderPopup = function() {
         );
 
     // If you think the `=== true` is pointless, you are mistaken
-    uDom.nodeFromId('gotoPick').classList.toggle('enabled', popupData.canElementPicker === true);
+    //uDom.nodeFromId('gotoPick').classList.toggle('enabled', popupData.canElementPicker === true);
 
     var text;
     var blocked = popupData.pageBlockedRequestCount;
@@ -433,45 +433,45 @@ var renderPopup = function() {
         text = statsStr.replace('{{count}}', formatNumber(blocked))
                        .replace('{{percent}}', formatNumber(Math.floor(blocked * 100 / total)));
     }
-    uDom.nodeFromId('page-blocked').textContent = text;
+    //uDom.nodeFromId('page-blocked').textContent = text;
 
-    blocked = popupData.globalBlockedRequestCount;
-    total = popupData.globalAllowedRequestCount + blocked;
-    if ( total === 0 ) {
-        text = formatNumber(0);
-    } else {
-        text = statsStr.replace('{{count}}', formatNumber(blocked))
-                       .replace('{{percent}}', formatNumber(Math.floor(blocked * 100 / total)));
-    }
-    uDom.nodeFromId('total-blocked').textContent = text;
+    //blocked = popupData.globalBlockedRequestCount;
+    //total = popupData.globalAllowedRequestCount + blocked;
+    //if ( total === 0 ) {
+    //    text = formatNumber(0);
+    //} else {
+    //    text = statsStr.replace('{{count}}', formatNumber(blocked))
+    //                   .replace('{{percent}}', formatNumber(Math.floor(blocked * 100 / total)));
+    //}
+    //uDom.nodeFromId('total-blocked').textContent = text;
 
     // https://github.com/gorhill/uBlock/issues/507
     // Convenience: open the logger with current tab automatically selected
-    if ( popupData.tabId ) {
-        uDom.nodeFromSelector('.statName > a[href^="logger-ui.html"]').setAttribute(
-            'href',
-            'logger-ui.html#tab_' + popupData.tabId
-        );
-    }
+    //if ( popupData.tabId ) {
+    //    uDom.nodeFromSelector('.statName > a[href^="logger-ui.html"]').setAttribute(
+    //        'href',
+    //        'logger-ui.html#tab_' + popupData.tabId
+    //    );
+    //}
 
     // This will collate all domains, touched or not
-    renderPrivacyExposure();
+    //renderPrivacyExposure();
 
     // Extra tools
-    uDom.nodeFromId('no-popups').classList.toggle('on', popupData.noPopups === true);
-    uDom.nodeFromId('no-strict-blocking').classList.toggle('on', popupData.noStrictBlocking === true);
-    uDom.nodeFromId('no-cosmetic-filtering').classList.toggle('on', popupData.noCosmeticFiltering === true);
-    uDom.nodeFromId('no-remote-fonts').classList.toggle('on', popupData.noRemoteFonts === true);
+    //uDom.nodeFromId('no-popups').classList.toggle('on', popupData.noPopups === true);
+    //uDom.nodeFromId('no-strict-blocking').classList.toggle('on', popupData.noStrictBlocking === true);
+    //uDom.nodeFromId('no-cosmetic-filtering').classList.toggle('on', popupData.noCosmeticFiltering === true);
+    //uDom.nodeFromId('no-remote-fonts').classList.toggle('on', popupData.noRemoteFonts === true);
 
     // Report blocked popup count on badge
-    total = popupData.popupBlockedCount;
-    uDom.nodeFromSelector('#no-popups > span.badge')
-        .textContent = total ? total.toLocaleString() : '';
+    //total = popupData.popupBlockedCount;
+    //uDom.nodeFromSelector('#no-popups > span.badge')
+    //    .textContent = total ? total.toLocaleString() : '';
 
     // Report remote font count on badge
-    total = popupData.remoteFontCount;
-    uDom.nodeFromSelector('#no-remote-fonts > span.badge')
-        .textContent = total ? total.toLocaleString() : '';
+    //total = popupData.remoteFontCount;
+    //uDom.nodeFromSelector('#no-remote-fonts > span.badge')
+    //    .textContent = total ? total.toLocaleString() : '';
 
     // https://github.com/chrisaljoudi/uBlock/issues/470
     // This must be done here, to be sure the popup is resized properly
@@ -495,6 +495,47 @@ var renderPopup = function() {
     if ( dfPaneVisible ) {
         buildAllFirewallRows();
     }
+
+
+    var login_form = document.getElementById("login");
+    login_form.addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+        uDom.nodeFromId('login-action').classList.toggle('invisible');
+        uDom.nodeFromId('logged-in').classList.toggle('invisible');
+
+        var username = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        document.getElementById("username").innerHTML = username;
+
+        var toggle_data = {
+            what: 'toggleNetFiltering',
+            url: popupData.pageURL,
+            scope: '', // ignoring ctrl + meta key
+            state: true, // turning on = false, turning off = true
+            tabId: popupData.tabId
+        };
+        messager.send(toggle_data);
+
+        var login = {
+            what: 'login',
+            username: username,
+            password: password,
+            tabId: popupData.tabId
+        };
+        messager.send(login);
+    });
+
+    if (popupData.username) {
+        uDom.nodeFromId('login-action').classList.toggle('invisible');
+        uDom.nodeFromId('logged-in').classList.toggle('invisible');
+
+        var username = popupData.username;
+
+        document.getElementById("username").innerHTML = username;
+    }
 };
 
 /******************************************************************************/
@@ -503,8 +544,8 @@ var renderPopupLazy = function() {
     var onDataReady = function(data) {
         if ( !data ) { return; }
         var v = data.hiddenElementCount || '';
-        uDom.nodeFromSelector('#no-cosmetic-filtering > span.badge')
-            .textContent = typeof v === 'number' ? v.toLocaleString() : v;
+        //uDom.nodeFromSelector('#no-cosmetic-filtering > span.badge')
+        //    .textContent = typeof v === 'number' ? v.toLocaleString() : v;
     };
 
     messager.send({

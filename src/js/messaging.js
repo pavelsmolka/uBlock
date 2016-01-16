@@ -315,6 +315,7 @@ var popupDataFromTabId = function(tabId, tabTitle) {
         r.noRemoteFonts = µb.hnSwitches.evaluateZ('no-remote-fonts', tabContext.rootHostname);
         r.remoteFontCount = pageStore.remoteFontCount;
         r.popupBlockedCount = pageStore.popupBlockedCount;
+        r.username = µb.username;
     } else {
         r.hostnameDict = {};
         r.firewallRules = getFirewallRules();
@@ -424,6 +425,13 @@ var onMessage = function(request, sender, callback) {
         if ( pageStore ) {
             pageStore.toggleNetFilteringSwitch(request.url, request.scope, request.state);
             µb.updateBadgeAsync(request.tabId);
+        }
+        break;
+
+    case 'login':
+        pageStore = µb.pageStoreFromTabId(request.tabId);
+        if (pageStore) {
+            pageStore.login(request.username, request.password);
         }
         break;
 

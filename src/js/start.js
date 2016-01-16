@@ -147,7 +147,21 @@ var onSelfieReady = function(selfie) {
 
 var onNetWhitelistReady = function(netWhitelistRaw) {
     µb.netWhitelist = µb.whitelistFromString(netWhitelistRaw);
+
+    // Temporary fixtures to test
+    addToWhiteList('ihned.cz');
+    addToWhiteList('techradar.com');
+
     µb.netWhitelistModifyTime = Date.now();
+};
+
+var addToWhiteList = function(domain) {
+    µb.netWhitelist['ihned.cz'] = [];
+    µb.netWhitelist['ihned.cz'].push('ihned.cz');
+};
+
+var onLoginReady = function(username) {
+    µb.username = username;
 };
 
 /******************************************************************************/
@@ -220,6 +234,8 @@ var onFirstFetchReady = function(fetched) {
     fromFetch(µb.restoreBackupSettings, fetched);
     onNetWhitelistReady(fetched.netWhitelist);
     onVersionReady(fetched.version);
+
+    onLoginReady(fetched.logged_in);
 
     // If we have a selfie, skip loading PSL, filters
     if ( onSelfieReady(fetched.selfie) ) {

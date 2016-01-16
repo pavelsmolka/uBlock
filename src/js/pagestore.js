@@ -467,6 +467,11 @@ PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
     this.netFilteringCache.empty();
 };
 
+PageStore.prototype.login = function(username, password) {
+    this.login = username;
+    µb.login(username, password);
+};
+
 /******************************************************************************/
 
 PageStore.prototype.filterRequest = function(context) {

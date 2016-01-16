@@ -152,6 +152,13 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     return true;
 };
 
+µBlock.login = function(username, password) {
+    console.log(username);
+    console.log(password);
+    this.keyvalSetOne('logged_in', username);
+    this.username = username;
+};
+
 /******************************************************************************/
 
 µBlock.stringFromWhitelist = function(whitelist) {
